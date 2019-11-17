@@ -4,9 +4,8 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var [app, http] = require('../app');
 var debug = require('debug')('lean-canvas-rts-backend:server');
-var http = require('http');
 
 /**
  * Get port from environment and store in Express.

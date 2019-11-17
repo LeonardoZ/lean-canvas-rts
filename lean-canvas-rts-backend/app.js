@@ -6,6 +6,27 @@ const routes = require("./routes");
 
 // ativando nosso middleware
 const app = express();
+const http = require("http");
+const io = require("socket.io")(http);
+
+const connectedUsers = {};
+
+io.on("connection", socket => {
+  const { canvasId } = socket.handshake.query;
+  if (connectedUsers[canvasId]) {
+    connectedUsers[canvasId] = connectedUsers[canvasId].push(socket.id);
+  } else {
+    connectedUsers[canvasId] = [].push(socket.id);
+  }
+});
+
+app.use((req, res, next) => {
+  req.io = io;
+  req.connectedUsers = connectedUsers;
+
+  return next();
+});
+
 app.use(
   cors({
     origin: true
@@ -19,4 +40,4 @@ app.use(cookieParser());
 
 app.use(routes);
 
-module.exports = app;
+module.exports = [app, http];
