@@ -20,22 +20,23 @@ module.exports = {
   async updateTopic(req, res) {
     await Topic.save(req.params.canvasId, req.body);
 
-    const targetSocket = req.connectedUsers[canvasId];
     const topic = { ...req.body };
-    
-    req.connectedUsers[canvasId].forEach(s =>{
-      console.log("Remove");
-      req.io.to(s).emit("remove", saved[0])}
-    );
+
+    req.connectedUsers[req.params.canvasId].forEach(s => {
+      req.io.to(s).emit("update", saved[0]);
+    });
 
     return res.status(200).json(topic);
   },
   async removeTopic(req, res) {
-    await Topic.remove(req.params.canvasId, req.params.id);
+    const [topic, _] = await Topic.getById(req.params.id);
+    if (topic) {
+      await Topic.remove(req.params.canvasId, req.params.id);
+    }
 
-    const targetSocket = req.connectedUsers[req.params.canvasId];
-    req.io.to(targetSocket).emit("remove", { id: req.params.id });
-
+    req.connectedUsers[req.params.canvasId].forEach(s =>
+      req.io.to(s).emit("remove", topic[0])
+    );
     return res.status(200).end();
   }
 };

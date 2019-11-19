@@ -2,7 +2,7 @@ import React from "react";
 import { Col } from "react-bootstrap";
 import Section from "./Section";
 
-export default ({ leanCanvas, topics, sections }) => {
+export default ({ leanCanvas, extended, topics, sections }) => {
   let filteredSections = sections.filter(s => s.show);
   let multipleSections = filteredSections.length > 1;
 
@@ -18,7 +18,9 @@ export default ({ leanCanvas, topics, sections }) => {
             loadedTopics={
               topics && topics.filter(t => t.section === s.name)
             }
+            extended={extended}
             key={i}
+            color={s.color}
             name={s.name}
           />
         ))}

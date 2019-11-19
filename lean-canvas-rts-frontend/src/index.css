@@ -18,3 +18,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.card {
+    max-width: 100%;
+}
+.card-text {
+    word-wrap: break-word;
+}

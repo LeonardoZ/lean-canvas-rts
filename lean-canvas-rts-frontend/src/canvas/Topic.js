@@ -1,19 +1,17 @@
 import React from "react";
-import { ListGroup, Dropdown, Form } from "react-bootstrap";
+import { Form, ListGroupItem } from "react-bootstrap";
 
 const styles = {
   root: {
-    maxWidth: "240px"
+    maxWidth: "260px"
+  },
+  text: {
+     wardWrap: "break-word",
+     "white-space": "pre-wrap"
   }
 };
 
-export default ({
-  topic,
-  onRemove,
-  save,
-  cancel,
-  type = "primary"
-}) => {
+export default ({ topic, onRemove, color, save, cancel, type = "primary" }) => {
   // edit or new fns
   const [input, setInput] = React.useState();
 
@@ -26,24 +24,22 @@ export default ({
     }
   }, [input, topic]);
 
- 
   let newTopic = (
-    <Form.Control
-      onKeyPress={saveTopic}
-      onBlur={cancel}
-      ref={setInput}
-    />
+    <Form.Control onKeyPress={saveTopic} onBlur={cancel} ref={setInput} />
   );
 
   let viewTopic = (
-    <div className="d-flex justify-content-between ">
-      {topic.content}
-      <Dropdown>
-        <Dropdown.Toggle variant="default" id="dropdown-basic" />
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => onRemove(topic)}>Remove</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+    <div className="d-flex justify-content-between">
+      <div className={styles.text}>{topic.content}</div>
+
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        onClick={() => onRemove(topic)}
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
   );
 
@@ -53,12 +49,19 @@ export default ({
     }
   }
 
+  // return (
+  //   <Card variant="primary" c>
+  //     <Card.Body>
+  //       <Card.Text className={styles.cardText}>
+  //         {topic.kind === "new" ? newTopic : viewTopic}
+  //       </Card.Text>
+  //     </Card.Body>
+  //   </Card>
+  // );
+
   return (
-    <ListGroup.Item
-      variant="primary"
-      className="w-auto p-1 mb-2"
-      style={styles.root}>
+    <ListGroupItem className={"p-3 mb-2 " + color} style={styles.root}>
       {topic.kind === "new" ? newTopic : viewTopic}
-    </ListGroup.Item>
+    </ListGroupItem>
   );
 };

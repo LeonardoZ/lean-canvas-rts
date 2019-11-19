@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Dropdown, Button } from "react-bootstrap";
+import { Card, Dropdown, Button, Row, Col } from "react-bootstrap";
 import Topic from "./Topic";
 import { saveTopic, removeTopic } from "../api/api";
 import io from "socket.io-client";
@@ -8,7 +8,14 @@ const styles = {
   sectionContent: {}
 };
 
-export default ({ canvasId, name, loadedTopics, show = true }) => {
+export default ({
+  canvasId,
+  name,
+  color,
+  extended,
+  loadedTopics,
+  show = true
+}) => {
   const [topics, setTopics] = React.useState(loadedTopics);
   const [textTopic, setTextTopic] = React.useState();
 
@@ -29,7 +36,6 @@ export default ({ canvasId, name, loadedTopics, show = true }) => {
       if (topic && topic.section === name)
         setTopics([...topics.filter(t => t.id !== topic.id)]);
     });
-
   }, [canvasId, topics, setTopics, name]);
 
   if (!show) return <React.Fragment />;
@@ -58,6 +64,19 @@ export default ({ canvasId, name, loadedTopics, show = true }) => {
   function cancelTextTopic() {
     setTextTopic(null);
   }
+  if (!topics) {
+    return <></>;
+  }
+  const cardTopics = topics.map((t, k) => (
+    <Topic
+      key={k}
+      color={color}
+      topic={t}
+      save={saveTextTopic}
+      cancel={cancelTextTopic}
+      onRemove={removeTextTopic}
+    />
+  ));
 
   return (
     <Card style={styles.sectionContent} className="w-100 flex-fill">
@@ -76,19 +95,29 @@ export default ({ canvasId, name, loadedTopics, show = true }) => {
         </Card.Title>
         <div className="d-flex flex-column justify-content-between">
           <div className="d-flex flex-column ">
-            {topics &&
-              topics.map((t, k) => (
-                <Topic
-                  key={k}
-                  topic={t}
-                  save={saveTextTopic}
-                  cancel={cancelTextTopic}
-                  onRemove={removeTextTopic}
-                />
-              ))}
+            {extended ? (
+              <Row>
+                {topics.map((t, k) => (
+                  <Col xs={6}>
+                    <Topic
+                      key={k}
+                      color={color}
+                      topic={t}
+                      save={saveTextTopic}
+                      cancel={cancelTextTopic}
+                      onRemove={removeTextTopic}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              cardTopics
+            )}
+
             {textTopic && (
               <Topic
                 key={999}
+                color={color}
                 topic={textTopic}
                 save={saveTextTopic}
                 cancel={cancelTextTopic}

@@ -5,35 +5,48 @@ import SectionColumn from "./SectionColumn";
 const sections = [
   {
     show: true,
-    name: "Problem"
+    name: "Problem",
+    color: "bg-info"
   },
   {
     show: true,
-    name: "Solution"
+    name: "Solution",
+    color: "bg-danger"
   },
   {
     show: true,
-    name: "Key Metrics"
+    name: "Key Metrics",
+    color: "bg-warning"
   },
   {
     show: true,
-    name: "Unique Value Proposition"
+    name: "Unique Value Proposition",
+    color: "bg-success"
   },
   {
     show: true,
-    name: "Unfair Advantage"
+    name: "Outcome",
+    color: "bg-warning"
   },
   {
     show: true,
-    name: "Customer Segments"
+    name: "Unfair Advantage",
+    color: "bg-warning"
   },
   {
     show: true,
-    name: "Cost Structure"
+    name: "Customer Segments",
+    color: "bg-info"
   },
   {
     show: true,
-    name: "Revenue Stream"
+    name: "Cost Structure",
+    color: "bg-success"
+  },
+  {
+    show: true,
+    name: "Revenue Stream",
+    color: "bg-info"
   }
 ];
 
@@ -68,24 +81,26 @@ export default ({ leanCanvas, topics }) => {
           <SectionColumn
             leanCanvas={leanCanvas}
             topics={topics}
-            sections={[sections[3]]}
+            sections={[sections[3], sections[4]]}
           />
           <SectionColumn
             leanCanvas={leanCanvas}
             topics={topics}
-            sections={[sections[4], sections[5]]}
+            sections={[sections[5], sections[6]]}
           />
         </Row>
         <Row noGutters>
           <SectionColumn
             leanCanvas={leanCanvas}
             topics={topics}
-            sections={[sections[6]]}
+            extended={true}
+            sections={[sections[7]]}
           />
           <SectionColumn
             leanCanvas={leanCanvas}
             topics={topics}
-            sections={[sections[7]]}
+            extended={true}
+            sections={[sections[8]]}
           />
         </Row>
       </Container>
