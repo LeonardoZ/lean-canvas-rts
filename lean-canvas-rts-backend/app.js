@@ -6,19 +6,22 @@ const routes = require("./routes");
 
 // ativando nosso middleware
 const app = express();
-const http = require("http");
-const io = require("socket.io")(http);
+const server = require("http").Server(app);
+const io = require("socket.io").listen(server);
 
 const connectedUsers = {};
 
 io.on("connection", socket => {
   const { canvasId } = socket.handshake.query;
   if (connectedUsers[canvasId]) {
-    connectedUsers[canvasId] = connectedUsers[canvasId].push(socket.id);
+    connectedUsers[canvasId].push(socket.id);
   } else {
-    connectedUsers[canvasId] = [].push(socket.id);
+    const newUsers = [socket.id];
+    connectedUsers[canvasId] = newUsers;
   }
 });
+
+io.origins("*:*");
 
 app.use((req, res, next) => {
   req.io = io;
@@ -40,4 +43,4 @@ app.use(cookieParser());
 
 app.use(routes);
 
-module.exports = [app, http];
+module.exports = [app, server];

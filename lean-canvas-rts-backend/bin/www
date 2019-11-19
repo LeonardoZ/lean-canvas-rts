@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var [app, http] = require('../app');
+var [app, server] = require('../app');
 var debug = require('debug')('lean-canvas-rts-backend:server');
 
 /**
@@ -13,12 +13,6 @@ var debug = require('debug')('lean-canvas-rts-backend:server');
 
 var port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
