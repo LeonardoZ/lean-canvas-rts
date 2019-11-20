@@ -15,3 +15,5 @@ CREATE TABLE `topics` (
   KEY `fk_canvas` (`canvas_id`),
   CONSTRAINT `fk_canvas` FOREIGN KEY (`canvas_id`) REFERENCES `canvas` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+
+INSERT INTO canvas(name) VALUES ('Canvas #1'), ('Canvas #2'), ('Canvas #3'), ('Canvas #4'), ('Canvas #5');
