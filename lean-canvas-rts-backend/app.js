@@ -9,16 +9,24 @@ const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io").listen(server);
 
-const connectedUsers = {};
+const connectedUsers = new Map();
 
 io.on("connection", socket => {
   const { canvasId } = socket.handshake.query;
-  if (connectedUsers[canvasId]) {
-    connectedUsers[canvasId].push(socket.id);
+  if (canvasId === "undefined") return;
+  console.log(canvasId);
+
+  if (!canvasId === undefined || connectedUsers.has(canvasId)) {
+    connectedUsers.get(canvasId).add(socket.id);
   } else {
-    const newUsers = [socket.id];
-    connectedUsers[canvasId] = newUsers;
+    connectedUsers.set(canvasId, new Set([socket.id]));
   }
+});
+
+io.on("disconnect", socket => {
+  console.log("Disco");
+  const { canvasId } = socket.handshake.query;
+  delete connectedUsers[canvasId];
 });
 
 io.origins("*:*");

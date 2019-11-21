@@ -3,7 +3,7 @@ import { Col } from "react-bootstrap";
 import Section from "./Section";
 
 export default ({ leanCanvas, extended, topics, sections }) => {
-  let filteredSections = sections.filter(s => s.show);
+  let filteredSections = sections;//sections.filter(s => s.show);
   let multipleSections = filteredSections.length > 1;
 
   let classes = multipleSections

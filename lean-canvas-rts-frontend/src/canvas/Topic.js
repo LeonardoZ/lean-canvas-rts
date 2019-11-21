@@ -6,8 +6,8 @@ const styles = {
     maxWidth: "260px"
   },
   text: {
-     wardWrap: "break-word",
-     "white-space": "pre-wrap"
+    wardWrap: "break-word",
+    "white-space": "pre-wrap"
   }
 };
 
@@ -22,7 +22,7 @@ export default ({ topic, onRemove, color, save, cancel, type = "primary" }) => {
         input.value = topic.content;
       }
     }
-  }, [input, topic]);
+  });
 
   let newTopic = (
     <Form.Control onKeyPress={saveTopic} onBlur={cancel} ref={setInput} />
@@ -34,7 +34,7 @@ export default ({ topic, onRemove, color, save, cancel, type = "primary" }) => {
 
       <button
         type="button"
-        class="close"
+        className="close"
         aria-label="Close"
         onClick={() => onRemove(topic)}
       >

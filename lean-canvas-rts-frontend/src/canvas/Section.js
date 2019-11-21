@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Dropdown, Button, Row, Col } from "react-bootstrap";
 import Topic from "./Topic";
 import { saveTopic, removeTopic } from "../api/api";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 const styles = {
   sectionContent: {}
@@ -22,21 +22,6 @@ export default ({
   React.useEffect(() => {
     setTopics(loadedTopics);
   }, [loadedTopics]);
-
-  React.useEffect(() => {
-    const socket = io("http://localhost:4000", {
-      query: { canvasId: canvasId }
-    });
-
-    socket.on("insert", topic => {
-      if (topic && topic.section === name) setTopics([...topics, topic]);
-    });
-
-    socket.on("remove", topic => {
-      if (topic && topic.section === name)
-        setTopics([...topics.filter(t => t.id !== topic.id)]);
-    });
-  }, [canvasId, topics, setTopics, name]);
 
   if (!show) return <React.Fragment />;
 
@@ -98,7 +83,7 @@ export default ({
             {extended ? (
               <Row>
                 {topics.map((t, k) => (
-                  <Col xs={6}>
+                  <Col xs={6} key={k}>
                     <Topic
                       key={k}
                       color={color}

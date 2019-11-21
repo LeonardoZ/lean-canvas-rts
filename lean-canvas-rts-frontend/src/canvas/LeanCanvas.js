@@ -50,8 +50,25 @@ const sections = [
   }
 ];
 
-export default ({ leanCanvas, topics }) => {
-  
+export default ({ leanCanvas, topics, socket }) => {
+  const [filteredTopics, setTopics] = React.useState([]);
+  React.useEffect(() => {
+    setTopics(topics);
+    socket.on("insert", topic => {      
+      console.log("insert ");
+      console.log(topic);
+      if (!topic) return;
+      setTopics([...topics, topic]);
+    });
+
+    socket.on("remove", topic => {
+      console.log("delete ");
+      console.log(topics);
+      if (!topic) return;
+      setTopics([...topics.filter(t => t.id !== topic.id)]);
+    });
+  }, [topics, setTopics, socket]);
+
   if (!leanCanvas) {
     return (
       <Container>
@@ -70,35 +87,35 @@ export default ({ leanCanvas, topics }) => {
         <Row noGutters>
           <SectionColumn
             leanCanvas={leanCanvas}
-            topics={topics}
+            topics={filteredTopics}
             sections={[sections[0]]}
           />
           <SectionColumn
             leanCanvas={leanCanvas}
-            topics={topics}
+            topics={filteredTopics}
             sections={[sections[1], sections[2]]}
           />
           <SectionColumn
             leanCanvas={leanCanvas}
-            topics={topics}
+            topics={filteredTopics}
             sections={[sections[3], sections[4]]}
           />
           <SectionColumn
             leanCanvas={leanCanvas}
-            topics={topics}
+            topics={filteredTopics}
             sections={[sections[5], sections[6]]}
           />
         </Row>
         <Row noGutters>
           <SectionColumn
             leanCanvas={leanCanvas}
-            topics={topics}
+            topics={filteredTopics}
             extended={true}
             sections={[sections[7]]}
           />
           <SectionColumn
             leanCanvas={leanCanvas}
-            topics={topics}
+            topics={filteredTopics}
             extended={true}
             sections={[sections[8]]}
           />
