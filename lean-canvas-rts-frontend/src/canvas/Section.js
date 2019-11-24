@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Dropdown, Button, Row, Col } from "react-bootstrap";
 import Topic from "./Topic";
 import { saveTopic, removeTopic } from "../api/api";
-// import io from "socket.io-client";
 
 const styles = {
   sectionContent: {}
@@ -17,7 +16,7 @@ export default ({
   show = true
 }) => {
   const [topics, setTopics] = React.useState(loadedTopics);
-  const [textTopic, setTextTopic] = React.useState();
+  const [textTopic, setTextTopic] = React.useState(null);
 
   React.useEffect(() => {
     setTopics(loadedTopics);
@@ -38,7 +37,6 @@ export default ({
     topic.section = name;
 
     await saveTopic(canvasId, topic);
-    // setTopics([...topics, topic]);
     setTextTopic(null);
   }
 

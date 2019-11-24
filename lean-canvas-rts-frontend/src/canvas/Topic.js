@@ -49,16 +49,6 @@ export default ({ topic, onRemove, color, save, cancel, type = "primary" }) => {
     }
   }
 
-  // return (
-  //   <Card variant="primary" c>
-  //     <Card.Body>
-  //       <Card.Text className={styles.cardText}>
-  //         {topic.kind === "new" ? newTopic : viewTopic}
-  //       </Card.Text>
-  //     </Card.Body>
-  //   </Card>
-  // );
-
   return (
     <ListGroupItem className={"p-3 mb-2 " + color} style={styles.root}>
       {topic.kind === "new" ? newTopic : viewTopic}

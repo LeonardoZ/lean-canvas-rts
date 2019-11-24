@@ -54,18 +54,14 @@ export default ({ leanCanvas, topics, socket }) => {
   const [filteredTopics, setTopics] = React.useState([]);
   React.useEffect(() => {
     setTopics(topics);
-    socket.on("insert", topic => {      
-      console.log("insert ");
-      console.log(topic);
-      if (!topic) return;
-      setTopics([...topics, topic]);
+    socket.on("insert", topics => {      
+      if (!topics) return;
+      setTopics(topics);
     });
 
-    socket.on("remove", topic => {
-      console.log("delete ");
-      console.log(topics);
-      if (!topic) return;
-      setTopics([...topics.filter(t => t.id !== topic.id)]);
+    socket.on("remove", topics => {
+      if (!topics) return;
+      setTopics(topics);
     });
   }, [topics, setTopics, socket]);
 
