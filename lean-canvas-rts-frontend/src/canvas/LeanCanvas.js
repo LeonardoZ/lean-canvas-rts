@@ -1,122 +1,49 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import SectionColumn from "./SectionColumn";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import io from "socket.io-client";
+import { loadCanvas } from "../api/api";
+import LeanCanvasPage from "./LeanCanvasPage";
 
-const sections = [
-  {
-    show: true,
-    name: "Problem",
-    color: "bg-info"
-  },
-  {
-    show: true,
-    name: "Solution",
-    color: "bg-danger"
-  },
-  {
-    show: true,
-    name: "Key Metrics",
-    color: "bg-warning"
-  },
-  {
-    show: true,
-    name: "Unique Value Proposition",
-    color: "bg-success"
-  },
-  {
-    show: true,
-    name: "Outcome",
-    color: "bg-warning"
-  },
-  {
-    show: true,
-    name: "Unfair Advantage",
-    color: "bg-warning"
-  },
-  {
-    show: true,
-    name: "Customer Segments",
-    color: "bg-info"
-  },
-  {
-    show: true,
-    name: "Cost Structure",
-    color: "bg-success"
-  },
-  {
-    show: true,
-    name: "Revenue Stream",
-    color: "bg-info"
-  }
-];
+export default () => {
+  const [data, setData] = useState();
+  const [socket, setSocket] = useState();
+  const { canvasId } = useParams();
 
-export default ({ leanCanvas, topics, socket }) => {
-  const [filteredTopics, setTopics] = React.useState([]);
-  React.useEffect(() => {
-    setTopics(topics);
-    socket.on("insert", topics => {      
+  useEffect(() => {
+    async function loadInitData() {
+      let loaded = await loadCanvas(canvasId);
+      setData(loaded.data);
+      if (loaded.data && !socket) {
+        const socket = io("http://localhost:4000", {
+          query: { canvasId: canvasId }
+        });
+        setSocket(socket);
+      }
+    }
+
+    loadInitData();
+  }, []);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("insert", topics => {
       if (!topics) return;
-      setTopics(topics);
+      setData({
+        canvas: data.canvas,
+        topics: topics
+      });
     });
 
     socket.on("remove", topics => {
       if (!topics) return;
-      setTopics(topics);
+      setData({
+        canvas: data.canvas,
+        topics: topics
+      });
     });
-  }, [topics, setTopics, socket]);
+  }, [socket]);
 
-  if (!leanCanvas) {
-    return (
-      <Container>
-        <h1>No canvas loaded!</h1>
-      </Container>
-    );
-  }
-  return (
-    <>
-      <Container>
-        <Row>
-          <Col>
-            <h1>{leanCanvas.name}</h1>
-          </Col>
-        </Row>
-        <Row noGutters>
-          <SectionColumn
-            leanCanvas={leanCanvas}
-            topics={filteredTopics}
-            sections={[sections[0]]}
-          />
-          <SectionColumn
-            leanCanvas={leanCanvas}
-            topics={filteredTopics}
-            sections={[sections[1], sections[2]]}
-          />
-          <SectionColumn
-            leanCanvas={leanCanvas}
-            topics={filteredTopics}
-            sections={[sections[3], sections[4]]}
-          />
-          <SectionColumn
-            leanCanvas={leanCanvas}
-            topics={filteredTopics}
-            sections={[sections[5], sections[6]]}
-          />
-        </Row>
-        <Row noGutters>
-          <SectionColumn
-            leanCanvas={leanCanvas}
-            topics={filteredTopics}
-            extended={true}
-            sections={[sections[7]]}
-          />
-          <SectionColumn
-            leanCanvas={leanCanvas}
-            topics={filteredTopics}
-            extended={true}
-            sections={[sections[8]]}
-          />
-        </Row>
-      </Container>
-    </>
-  );
+  if (data === undefined) return <p>No canvas loaded yet...</p>;
+
+  return <LeanCanvasPage canvas={data.canvas} topics={data.topics} />;
 };

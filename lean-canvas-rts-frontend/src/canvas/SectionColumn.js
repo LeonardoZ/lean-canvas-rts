@@ -1,8 +1,8 @@
 import React from "react";
 import { Col } from "react-bootstrap";
-import Section from "./Section";
+import SectionContainer from "./SectionContainer";
 
-export default ({ leanCanvas, extended, topics, sections }) => {
+export default ({ canvas, extended, topics, sections }) => {
   let filteredSections = sections;//sections.filter(s => s.show);
   let multipleSections = filteredSections.length > 1;
 
@@ -13,11 +13,9 @@ export default ({ leanCanvas, extended, topics, sections }) => {
     <Col className={classes}>
       {filteredSections &&
         filteredSections.map((s, i) => (
-          <Section
-            canvasId={leanCanvas.id}
-            loadedTopics={
-              topics && topics.filter(t => t.section === s.name)
-            }
+          <SectionContainer
+            canvasId={canvas.id}
+            loadedTopics={topics && topics.filter(t => t.section === s.name)}
             extended={extended}
             key={i}
             color={s.color}

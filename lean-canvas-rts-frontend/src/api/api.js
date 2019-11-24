@@ -5,7 +5,7 @@ const api = axios.create({
 });
 
 export function loadCanvas(id) {
-  return api.get(`/canvas/${id}`);
+  return api.get(`/canvas/${id}/all`);
 }
 
 export function loadTopics(canvasId) {

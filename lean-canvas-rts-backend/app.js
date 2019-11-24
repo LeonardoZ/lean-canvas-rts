@@ -14,8 +14,7 @@ const connectedUsers = new Map();
 io.on("connection", socket => {
   const { canvasId } = socket.handshake.query;
   if (canvasId === "undefined") return;
-  console.log(canvasId);
-
+  
   if (!canvasId === undefined || connectedUsers.has(canvasId)) {
     connectedUsers.get(canvasId).add(socket.id);
   } else {
@@ -24,7 +23,6 @@ io.on("connection", socket => {
 });
 
 io.on("disconnect", socket => {
-  console.log("Disco");
   const { canvasId } = socket.handshake.query;
   delete connectedUsers[canvasId];
 });

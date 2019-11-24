@@ -1,6 +1,7 @@
 const Topic = require("../models/Topic");
 
 module.exports = {
+  
   async loadTopics(req, res) {
     const [rows, _] = await Topic.getAll(req.params.canvasId);
     return res.json(rows);
