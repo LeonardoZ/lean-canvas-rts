@@ -2,6 +2,15 @@ const Canvas = require("../models/Canvas");
 const Topic = require("../models/Topic");
 
 module.exports = {
+  async createCanvas(req, res) {
+    const [rows, _] = await Canvas.create(req.body);
+    const canvas = {
+      name: req.body.name,
+      kind_of: req.body.kind_of,
+      id: rows.insertId,
+    }
+    return res.status(201).json(canvas);
+  },
   async loadAllCanvas(req, res) {
     const [rows, _] = await Canvas.getAll();
     return res.json(rows);

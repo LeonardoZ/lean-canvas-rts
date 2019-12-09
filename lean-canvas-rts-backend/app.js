@@ -14,17 +14,22 @@ const connectedUsers = new Map();
 io.on("connection", socket => {
   const { canvasId } = socket.handshake.query;
   if (canvasId === "undefined") return;
-  
+
   if (!canvasId === undefined || connectedUsers.has(canvasId)) {
     connectedUsers.get(canvasId).add(socket.id);
   } else {
     connectedUsers.set(canvasId, new Set([socket.id]));
   }
-});
 
-io.on("disconnect", socket => {
-  const { canvasId } = socket.handshake.query;
-  delete connectedUsers[canvasId];
+  socket.on("disconnected", socket => {
+    // const { canvasId } = socket.handshake.query;
+    console.log(socket.handshake);
+    console.log(canvasId);
+    console.log(socket.id);
+    // connectedUsers[canvasId] = connectedUsers[canvasId].filter(
+    //   u => u != socket.id
+    // );
+  });
 });
 
 io.origins("*:*");

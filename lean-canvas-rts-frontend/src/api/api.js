@@ -4,6 +4,14 @@ const api = axios.create({
   baseURL: "http://localhost:4000"
 });
 
+export function saveCanvas(canvas) {
+  return api.post(`/canvas`, canvas);
+}
+
+export function loadCanvases() {
+  return api.get(`/canvas`);
+}
+
 export function loadCanvas(id) {
   return api.get(`/canvas/${id}/all`);
 }
