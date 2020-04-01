@@ -1,0 +1,63 @@
+version: "3"
+services: 
+    backend:    
+        image: "node:12"
+        container_name: lean_canvas_rts_backend
+        expose:
+            - "${BACKEND_SERVER_PORT}"
+        user: "node"
+        networks: 
+            - lcrts_network
+        working_dir: "/home/node/app"
+        environment: 
+            BACKEND_SERVER_HOST: ${BACKEND_SERVER_HOST}
+            BACKEND_SERVER_PORT: ${BACKEND_SERVER_PORT}
+            DB_HOST: ${DB_HOST}
+            DB_USER: ${DB_USER}
+            DB_PASS: ${DB_PASS}
+            DB_ROOT_PASS: ${DB_ROOT_PASS}
+            DB_SCHEMA: ${DB_SCHEMA} 
+        depends_on:
+            - db
+        ports: 
+            - "${BACKEND_SERVER_PORT}:${BACKEND_SERVER_PORT}"
+        volumes:
+            - ./lean-canvas-rts-backend:/home/node/app
+        command:  bash -c "ls -lah && npm install && npm start"
+    frontend:    
+        image: "node:12"
+        container_name: lean_canvas_rts_frontend
+        expose:
+            - ${FRONTEND_SERVER_PORT}
+        user: "node"
+        working_dir: "/home/node/app"
+        depends_on:
+            - backend
+            - db
+        environment:  
+            REACT_APP_BACKEND_SERVER_HOST: ${BACKEND_SERVER_HOST}
+            REACT_APP_BACKEND_SERVER_PORT: ${BACKEND_SERVER_PORT}
+        networks: 
+            - lcrts_network
+        ports: 
+            - ${FRONTEND_SERVER_PORT}:${FRONTEND_SERVER_PORT}
+        volumes:
+            - ./lean-canvas-rts-frontend:/home/node/app
+        command: bash -c "npm install --silent && npm start"
+    db:
+        image: mariadb
+        container_name: lean_canvas_rts_db
+        networks: 
+            - lcrts_network
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+            MYSQL_DATABASE: ${DB_SCHEMA}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASS}
+            MYSQL_INITDB_SKIP_TZINFO: 1
+        volumes:
+            - ./docker/db_data/:/var/lib/mysql/data
+            - ./lean-canvas-rts-backend/sql/:/docker-entrypoint-initdb.d/:rw
+networks: 
+    lcrts_network:
+        driver: bridge

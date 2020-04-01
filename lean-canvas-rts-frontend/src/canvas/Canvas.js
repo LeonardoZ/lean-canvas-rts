@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { loadCanvas } from "../api/api";
 
+const endpoint =  `${process.env.REACT_APP_BACKEND_SERVER_HOST}:${process.env.REACT_APP_BACKEND_SERVER_PORT}`;
+
 export default ({CanvasPage}) => {
   const [data, setData] = useState();
   const [socket, setSocket] = useState();
@@ -13,7 +15,7 @@ export default ({CanvasPage}) => {
       let loaded = await loadCanvas(canvasId);
       setData(loaded.data);
       if (loaded.data && !socket) {
-        const socket = io("http://localhost:4000", {
+        const socket = io(endpoint, {
           query: { canvasId: canvasId }
         });
         setSocket(socket);

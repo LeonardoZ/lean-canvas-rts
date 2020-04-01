@@ -1,8 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000"
+  baseURL: `${process.env.REACT_APP_BACKEND_SERVER_HOST}:${process.env.REACT_APP_BACKEND_SERVER_PORT}`
 });
+
+console.log(process.env);
 
 export function saveCanvas(canvas) {
   return api.post(`/canvas`, canvas);
